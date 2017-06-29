@@ -1,8 +1,6 @@
 # ChattyApp
 
-Pinterest for learners.
-
-Allow learners to save learning resources like tutorials, blogs and videos in a central place that is publicly available to any user.
+Chatty will allow users to communicate with each other without having to register accounts. It will use React, a popular front-end library created and used heavily by Facebook as well as modern tools for Node including Webpack and Babel.
 
 ## Functional Requirements:
 * Primarily a client-side SPA (single-page app) built with ReactJS
@@ -49,9 +47,3 @@ Allow learners to save learning resources like tutorials, blogs and videos in a 
 
 ## Screenshots
 !["Main Page"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/MainPage.png)
-!["Registration"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/Registration.png)
-!["Search"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/Search.png)
-!["UpdateProfile"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/UpdateProfile.png)
-!["My Resources"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/MyResources.png)
-!["Resource Details & Comments"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/ResourceDetails%2BComments.png)
-!["Responsive Main Page"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/ResponsiveDesign.png)
