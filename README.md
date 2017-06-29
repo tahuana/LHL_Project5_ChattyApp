@@ -46,4 +46,4 @@ Chatty will allow users to communicate with each other without having to registe
 - react-dom
 
 ## Screenshots
-!["Main Page"](https://github.com/SeanSFitz/ResourceWall/blob/master/screenshots/MainPage.png)
+!["Chat Page"](https://github.com/tahuana/LHL_Project5_ChattyApp/blob/master/docs/Screen%20Shot%202017-06-29%20at%205.54.02%20PM.png?raw=true)
