@@ -4,6 +4,8 @@ const express = require('express');
 const Socket = require('ws');
 const uuidv1 = require('uuid/v1');
 let totalOfConnexions = 0;
+let connectionNotification;
+
 // Set the port to 3001
 const PORT = 3001;
 
@@ -21,7 +23,6 @@ const wss = new Socket.Server({ server });
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   totalOfConnexions++;
-  console.log("total of conections: ", totalOfConnexions);
 
   wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
@@ -31,8 +32,8 @@ wss.on('connection', (ws) => {
     });
   };
 
-  let newConnection = { type: "conections", totalOfConnetcions = totalOfConnexions};
-  wss.broadcast(newConnection);
+  connectionNotification = { type: "connections", totalOfConnections: totalOfConnexions};
+  wss.broadcast(connectionNotification);
 
   ws.on('message', (message) => {
     const newMessage = JSON.parse(message);
@@ -56,7 +57,8 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     totalOfConnexions--;
     console.log('Client disconnected');
-console.log("total of conections: ", totalOfConnexions);
+    connectionNotification = { type: "connections", totalOfConnections: totalOfConnexions};
+    wss.broadcast(connectionNotification);
   });
 });
 

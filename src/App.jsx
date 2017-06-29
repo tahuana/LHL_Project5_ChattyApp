@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
+import NavBar from './NavBar.jsx';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.socket = new WebSocket('ws://localhost:3001');
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: 'Bob', // optional. if currentUser is not defined, it means the user is Anonymous
+      totalOfConnections: 0,
       messages: [
         {
           id: 1,
@@ -31,7 +33,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
+    // console.log("componentDidMount <App />");
 
     this.socket.onopen = function (event) {
       console.log('Successfully connected to the server!!')
@@ -39,8 +41,23 @@ class App extends Component {
 
     this.socket.onmessage = (data) => {
       const incoming = JSON.parse(data.data);
-      const messages = this.state.messages.concat(incoming);
-      this.setState({messages: messages});
+      let messages;
+
+      switch(incoming.type) {
+        case "incomingMessage":
+          messages = this.state.messages.concat(incoming);
+          this.setState({messages: messages});
+          break;
+        case "incomingNotification":
+          messages = this.state.messages.concat(incoming);
+          this.setState({messages: messages, currentUser: incoming.username});
+          break;
+        case "connections":
+          this.setState({totalOfConnections: incoming.totalOfConnections});
+          break;
+        default:
+          throw new Error("Unknown event type " + incoming.type);
+      }
     };
 
 
@@ -58,14 +75,11 @@ class App extends Component {
   };
 
   render() {
-    console.log("Rendering <App/>");
     return (
       <div>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-        </nav>
+        <NavBar totalOfConnections={this.state.totalOfConnections} />
         <MessageList messagesList={this.state.messages}/>
-        <ChatBar name={this.state.currentUser.name} message={this.handleNewMessages.bind(this)}/>
+        <ChatBar name={this.state.currentUser} message={this.handleNewMessages.bind(this)}/>
       </div>
     );
   }

@@ -27,15 +27,13 @@ class ChatBar extends Component {
 
       if (oldUserName !== newUserName) {
         this.setState({currentUser: newUserName});
-        let newMessage = { type: "postNotification", content: `${oldUserName} changed their name to ${newUserName}`};
+        let newMessage = { type: "postNotification", content: `${oldUserName} changed their name to ${newUserName}`, username: newUserName};
         this.props.message(newMessage);
-        console.log("content: ", newUserName.content);
       }
   };
 
 
   render() {
-  console.log("Rendering <ChatBar/>")
 
     return (
       <footer className="chatbar">
