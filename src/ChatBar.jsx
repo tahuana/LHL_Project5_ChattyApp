@@ -5,24 +5,34 @@ class ChatBar extends Component {
     super(props);
     this.state = {
       currentUser: this.props.name
-    }
+    };
   }
 
-  _handleChangeMessage(e) {
-    if (e.key === 'Enter') {
-      let newMessage = { username: this.state.currentUser, content: e.target.value};
+  _handleChangeMessage = (e) => {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      let newMessage = { type: "postMessage", username: this.state.currentUser, content: e.target.value};
       this.props.message(newMessage);
       e.target.value = '';
-
     }
   };
 
-  _handleChangeUsername(e) {
+  _handleChangeUsername = (e) => {
       let oldUserName = this.state.currentUser;
-      let newUserName = e.target.value;
-      this.setState({currentUser: newUserName});
-      console.log("UserName changed from '" + oldUserName + "' to '" + newUserName + "'");
+      let newUserName = "Anonymous";
+
+      if (e.target.value.length > 0) {
+        newUserName = e.target.value;
+      }
+
+
+      if (oldUserName !== newUserName) {
+        this.setState({currentUser: newUserName});
+        let newMessage = { type: "postNotification", content: `${oldUserName} changed their name to ${newUserName}`};
+        this.props.message(newMessage);
+        console.log("content: ", newUserName.content);
+      }
   };
+
 
   render() {
   console.log("Rendering <ChatBar/>")

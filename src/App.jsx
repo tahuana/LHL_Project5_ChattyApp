@@ -13,18 +13,20 @@ class App extends Component {
           id: 1,
           username: "Bob",
           content: "Has anyone seen my marbles?",
+          type: "incomingMessage"
         },
         {
           id: 2,
           username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
+          type: "incomingMessage"
         }
       ]
     };
   }
 
 
-  handleNewMessages (newMessage) {
+  handleNewMessages = (newMessage) => {
       this.socket.send(JSON.stringify(newMessage));
   }
 
@@ -36,9 +38,9 @@ class App extends Component {
     };
 
     this.socket.onmessage = (data) => {
-      const newMessage = JSON.parse(data.data);
-      const messages = this.state.messages.concat(newMessage)
-      this.setState({messages: messages})
+      const incoming = JSON.parse(data.data);
+      const messages = this.state.messages.concat(incoming);
+      this.setState({messages: messages});
     };
 
 
@@ -53,10 +55,10 @@ class App extends Component {
     // }, 3000);
 
 
-  }
+  };
 
   render() {
-    console.log("Rendering <App/>")
+    console.log("Rendering <App/>");
     return (
       <div>
         <nav className="navbar">

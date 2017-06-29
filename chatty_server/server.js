@@ -3,7 +3,7 @@
 const express = require('express');
 const Socket = require('ws');
 const uuidv1 = require('uuid/v1');
-
+let totalOfConnexions = 0;
 // Set the port to 3001
 const PORT = 3001;
 
@@ -20,6 +20,8 @@ const wss = new Socket.Server({ server });
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
+  totalOfConnexions++;
+  console.log("total of conections: ", totalOfConnexions);
 
   wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
@@ -29,14 +31,32 @@ wss.on('connection', (ws) => {
     });
   };
 
+  let newConnection = { type: "conections", totalOfConnetcions = totalOfConnexions};
+  wss.broadcast(newConnection);
+
   ws.on('message', (message) => {
-    const user = JSON.parse(message).username;
-    const new_message = JSON.parse(message).content;
-    const id = uuidv1();
-    wss.broadcast({id: id, username: user, content: new_message})
+    const newMessage = JSON.parse(message);
+    newMessage.id = uuidv1();
+
+    switch(newMessage.type) {
+      case "postMessage":
+        newMessage.type = "incomingMessage"
+        break;
+      case "postNotification":
+        newMessage.type = "incomingNotification"
+        break;
+      default:
+        throw new Error("Unknown event type " + newMessage.type);
+    }
+
+    wss.broadcast(newMessage)
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    totalOfConnexions--;
+    console.log('Client disconnected');
+console.log("total of conections: ", totalOfConnexions);
+  });
 });
 
